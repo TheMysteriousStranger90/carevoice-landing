@@ -1,0 +1,117 @@
+.soap-format {
+  &__layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+
+    @media (max-width: 960px) {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+  }
+
+  &__left {
+    position: sticky;
+    top: 90px;
+
+    @media (max-width: 960px) {
+      position: static;
+    }
+  }
+
+  &__title {
+    font-size: clamp(1.75rem, 3.5vw, 2.25rem);
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-block: 1rem;
+    line-height: 1.2;
+  }
+
+  &__subtitle {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    line-height: 1.75;
+    margin-bottom: 1.5rem;
+
+    strong {
+      color: var(--text-primary);
+    }
+  }
+
+  &__features {
+    margin-top: 1.5rem;
+  }
+
+  &__right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  &__card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 1.25rem;
+    transition: all var(--transition);
+    border-left: 4px solid transparent;
+
+    &--s { border-left-color: var(--soap-s); }
+    &--o { border-left-color: var(--soap-o); }
+    &--a { border-left-color: var(--soap-a); }
+    &--p { border-left-color: var(--soap-p); }
+
+    &:hover {
+      transform: translateX(4px);
+      box-shadow: var(--shadow-md);
+    }
+  }
+
+  &__card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    margin-bottom: 0.625rem;
+  }
+
+  &__letter {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: 800;
+
+    .soap-format__card--s & { background: rgba(56, 139, 253, 0.2); color: var(--soap-s); }
+    .soap-format__card--o & { background: rgba(63, 185, 80, 0.2); color: var(--soap-o); }
+    .soap-format__card--a & { background: rgba(210, 153, 34, 0.2); color: var(--soap-a); }
+    .soap-format__card--p & { background: rgba(188, 140, 255, 0.2); color: var(--soap-p); }
+  }
+
+  &__section-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  &__card-text {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    line-height: 1.65;
+    margin-bottom: 0.75rem;
+  }
+
+  &__example {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    font-style: italic;
+    padding: 0.625rem 0.875rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: var(--radius-md);
+    border-left: 2px solid var(--border);
+    line-height: 1.6;
+  }
+}
