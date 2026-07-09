@@ -8,8 +8,10 @@ import {
   inject
 } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { RevealDirective } from '../../directives/reveal.directive';
+import { environment } from '../../../environments/environment';
 
 interface Countdown {
   days: number;
@@ -75,14 +77,17 @@ interface Countdown {
                     <span class="launch-banner__error">Please enter a valid email address.</span>
                   }
                 </div>
-                <button type="submit" class="btn btn--primary btn--lg launch-banner__submit">
+                <button type="submit" class="btn btn--primary btn--lg launch-banner__submit" [disabled]="loading()">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <line x1="22" y1="2" x2="11" y2="13"/>
                     <polygon points="22 2 15 22 11 13 2 9 22 2"/>
                   </svg>
-                  Join Waitlist
+                  {{ loading() ? 'Joining…' : 'Join Waitlist' }}
                 </button>
               </div>
+              @if (submitError()) {
+                <p class="launch-banner__submit-error" role="alert">{{ submitError() }}</p>
+              }
               <p class="launch-banner__disclaimer">
                 No spam, ever. We'll only reach out with launch news and early access invites.
               </p>
@@ -121,6 +126,7 @@ interface Countdown {
 })
 export class LaunchBannerComponent implements OnInit, OnDestroy {
   private readonly fb = inject(FormBuilder);
+  private readonly http = inject(HttpClient);
 
   // Target: March 1, 2027
   private readonly launchDate = new Date('2027-03-01T00:00:00');
@@ -128,6 +134,8 @@ export class LaunchBannerComponent implements OnInit, OnDestroy {
 
   submitted = signal(false);
   showError = signal(false);
+  loading = signal(false);
+  submitError = signal<string | null>(null);
 
   readonly waitlistForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]]
@@ -164,8 +172,27 @@ export class LaunchBannerComponent implements OnInit, OnDestroy {
       return;
     }
     this.showError.set(false);
-    // In production this would call an API endpoint
-    this.submitted.set(true);
+    this.submitError.set(null);
+    this.loading.set(true);
+
+    const email = this.waitlistForm.value.email;
+
+    this.http
+      .post(
+        environment.waitlistEndpoint,
+        { email, _subject: 'New CareVoice waitlist signup' },
+        { headers: { Accept: 'application/json' } }
+      )
+      .subscribe({
+        next: () => {
+          this.loading.set(false);
+          this.submitted.set(true);
+        },
+        error: () => {
+          this.loading.set(false);
+          this.submitError.set('Something went wrong. Please try again in a moment.');
+        }
+      });
   }
 
   private computeCountdown(): Countdown {

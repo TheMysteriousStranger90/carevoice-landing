@@ -1,9 +1,11 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink],
   template: `
     <footer class="footer">
       <div class="container">
@@ -40,7 +42,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
                 <ul class="footer__link-list">
                   @for (link of group.links; track link.label) {
                     <li>
-                      <a [href]="link.href" class="footer__link">{{ link.label }}</a>
+                      <a routerLink="/" [fragment]="link.fragment" class="footer__link">{{ link.label }}</a>
                     </li>
                   }
                 </ul>
@@ -58,11 +60,11 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
             Launching early 2027.
           </p>
           <div class="footer__legal">
-            <a href="#" class="footer__legal-link">Privacy Policy</a>
+            <a routerLink="/privacy" class="footer__legal-link">Privacy Policy</a>
             <span class="footer__legal-dot"></span>
-            <a href="#" class="footer__legal-link">Terms of Service</a>
+            <a routerLink="/terms" class="footer__legal-link">Terms of Service</a>
             <span class="footer__legal-dot"></span>
-            <a href="#" class="footer__legal-link">HIPAA Notice</a>
+            <a routerLink="/hipaa" class="footer__legal-link">HIPAA Notice</a>
           </div>
         </div>
 
@@ -78,29 +80,29 @@ export class FooterComponent {
     {
       title: 'Product',
       links: [
-        { label: 'Features', href: '#features' },
-        { label: 'How It Works', href: '#how-it-works' },
-        { label: 'Pricing', href: '#pricing' },
-        { label: 'Security', href: '#security' },
-        { label: 'Join Waitlist', href: '#waitlist' }
+        { label: 'Features', fragment: 'features' },
+        { label: 'How It Works', fragment: 'how-it-works' },
+        { label: 'Pricing', fragment: 'pricing' },
+        { label: 'Security', fragment: 'security' },
+        { label: 'Join Waitlist', fragment: 'waitlist' }
       ]
     },
     {
       title: 'For Clinicians',
       links: [
-        { label: 'Solo Therapists', href: '#features' },
-        { label: 'Group Practices', href: '#features' },
-        { label: 'Clinics & Institutions', href: '#features' },
-        { label: 'SOAP Documentation', href: '#soap-format' }
+        { label: 'Solo Therapists', fragment: 'features' },
+        { label: 'Group Practices', fragment: 'features' },
+        { label: 'Clinics & Institutions', fragment: 'features' },
+        { label: 'SOAP Documentation', fragment: 'soap-format' }
       ]
     },
     {
       title: 'Compliance',
       links: [
-        { label: 'HIPAA Compliance', href: '#security' },
-        { label: 'Data Security', href: '#security' },
-        { label: 'Audit & Logging', href: '#security' },
-        { label: 'BAA (Clinic plan)', href: '#pricing' }
+        { label: 'HIPAA Compliance', fragment: 'security' },
+        { label: 'Data Security', fragment: 'security' },
+        { label: 'Audit & Logging', fragment: 'security' },
+        { label: 'BAA (Clinic plan)', fragment: 'pricing' }
       ]
     }
   ];
