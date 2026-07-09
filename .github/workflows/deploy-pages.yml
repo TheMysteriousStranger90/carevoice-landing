@@ -34,6 +34,11 @@ jobs:
       - name: Build
         run: npm run build:pages
 
+      # GitHub Pages has no SPA rewrite; serving 404.html as a copy of index.html
+      # lets deep links like /carevoice-landing/privacy boot the Angular router.
+      - name: Add SPA 404 fallback
+        run: cp ./dist/carevoice-landing/browser/index.html ./dist/carevoice-landing/browser/404.html
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
