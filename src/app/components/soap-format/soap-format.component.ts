@@ -8,7 +8,7 @@ import { RevealDirective } from '../../directives/reveal.directive';
   imports: [RevealDirective, UpperCasePipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="section soap-format">
+    <section class="section soap-format" id="soap-format">
       <div class="container">
         <div class="soap-format__layout">
 

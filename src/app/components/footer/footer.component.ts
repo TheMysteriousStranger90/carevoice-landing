@@ -32,6 +32,33 @@ import { RouterLink } from '@angular/router';
               </svg>
               HIPAA-compliant
             </div>
+
+            <div class="footer__author">
+              <p class="footer__author-label">Designed &amp; built by</p>
+              <a [href]="author.website" class="footer__author-name" target="_blank" rel="noopener">
+                {{ author.name }}
+              </a>
+              <div class="footer__author-links">
+                <a [href]="author.website" class="footer__author-link" target="_blank" rel="noopener" aria-label="Personal website">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                  </svg>
+                </a>
+                <a [href]="author.github" class="footer__author-link" target="_blank" rel="noopener" aria-label="GitHub">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.2.8-.6v-2c-3.2.7-3.9-1.5-3.9-1.5-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17.3 4.7 18.3 5 18.3 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A11.5 11.5 0 0 0 23.5 12C23.5 5.7 18.3.5 12 .5z"/>
+                  </svg>
+                </a>
+                <a [href]="'mailto:' + author.email" class="footer__author-link" aria-label="Email">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <path d="m22 7-10 6L2 7"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
           </div>
 
           <!-- Links -->
@@ -76,6 +103,13 @@ import { RouterLink } from '@angular/router';
 export class FooterComponent {
   readonly year = new Date().getFullYear();
 
+  readonly author = {
+    name: 'Bohdan Harabadzhyu (Bogdan Garabagiu)',
+    website: 'https://bohdan-harabadzhyu-homepage.vercel.app/',
+    github: 'https://github.com/TheMysteriousStranger90',
+    email: 'bohdan_harabadzhyu@outlook.com'
+  };
+
   readonly linkGroups = [
     {
       title: 'Product',
@@ -84,6 +118,7 @@ export class FooterComponent {
         { label: 'How It Works', fragment: 'how-it-works' },
         { label: 'Pricing', fragment: 'pricing' },
         { label: 'Security', fragment: 'security' },
+        { label: 'Development', fragment: 'progress' },
         { label: 'Join Waitlist', fragment: 'waitlist' }
       ]
     },
