@@ -24,6 +24,7 @@ import { Component, signal, HostListener, ChangeDetectionStrategy } from '@angul
           <a href="#how-it-works" class="navbar__link">How It Works</a>
           <a href="#pricing" class="navbar__link">Pricing</a>
           <a href="#security" class="navbar__link">Security</a>
+          <a href="#progress" class="navbar__link">Diary</a>
         </nav>
 
         <!-- Actions -->
@@ -55,6 +56,7 @@ import { Component, signal, HostListener, ChangeDetectionStrategy } from '@angul
           <a href="#how-it-works" class="navbar__mobile-link" (click)="closeMenu()">How It Works</a>
           <a href="#pricing" class="navbar__mobile-link" (click)="closeMenu()">Pricing</a>
           <a href="#security" class="navbar__mobile-link" (click)="closeMenu()">Security</a>
+          <a href="#progress" class="navbar__mobile-link" (click)="closeMenu()">Diary</a>
         </nav>
         <a href="#waitlist" class="btn btn--primary" style="width:100%;justify-content:center" (click)="closeMenu()">
           Join Waitlist
