@@ -84,6 +84,7 @@ export class FooterComponent {
         { label: 'How It Works', fragment: 'how-it-works' },
         { label: 'Pricing', fragment: 'pricing' },
         { label: 'Security', fragment: 'security' },
+        { label: 'Development', fragment: 'progress' },
         { label: 'Join Waitlist', fragment: 'waitlist' }
       ]
     },

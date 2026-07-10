@@ -7,6 +7,7 @@ import { SoapFormatComponent } from '../../components/soap-format/soap-format.co
 import { FeaturesComponent } from '../../components/features/features.component';
 import { PricingComponent } from '../../components/pricing/pricing.component';
 import { SecuritySectionComponent } from '../../components/security-section/security-section.component';
+import { DevDiaryComponent } from '../../components/dev-diary/dev-diary.component';
 import { LaunchBannerComponent } from '../../components/launch-banner/launch-banner.component';
 import { FooterComponent } from '../../components/footer/footer.component';
 
@@ -22,6 +23,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
     FeaturesComponent,
     PricingComponent,
     SecuritySectionComponent,
+    DevDiaryComponent,
     LaunchBannerComponent,
     FooterComponent
   ],
@@ -35,6 +37,7 @@ import { FooterComponent } from '../../components/footer/footer.component';
       <app-features />
       <app-pricing />
       <app-security-section />
+      <app-dev-diary />
       <app-launch-banner />
     </main>
     <app-footer />
