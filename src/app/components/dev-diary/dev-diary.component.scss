@@ -131,6 +131,11 @@
     align-items: flex-start;
     justify-content: center;
     overflow: hidden;
+    position: relative;
+
+    &--video {
+      aspect-ratio: 16 / 9;
+    }
   }
 
   &__img {
@@ -139,6 +144,40 @@
     object-fit: cover;
     object-position: top center;
     display: block;
+  }
+
+  &__video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    border: 0;
+  }
+
+  &__play {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 72px;
+    height: 72px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.55);
+    border: 2px solid rgba(255, 255, 255, 0.85);
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.2s ease, background 0.2s ease;
+
+    svg {
+      margin-left: 3px; // optical centering for the play triangle
+    }
+
+    &:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      transform: scale(1.06);
+    }
   }
 
   // Controls
