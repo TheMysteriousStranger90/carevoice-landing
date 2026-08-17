@@ -1,10 +1,13 @@
-import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal, computed, inject } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { RevealDirective } from '../../directives/reveal.directive';
 
 interface Shot {
+  type: 'video' | 'image';
   src: string;
   url: string;
   caption: string;
+  youtubeId?: string;
 }
 
 @Component({
@@ -38,7 +41,7 @@ interface Shot {
           }
         </div>
 
-        <!-- Screenshot viewer in a browser frame -->
+        <!-- Screenshot / video viewer in a browser frame -->
         <div class="dev-diary__viewer" appReveal>
           <div class="dev-diary__browser">
             <div class="dev-diary__chrome">
@@ -47,14 +50,40 @@ interface Shot {
               </span>
               <span class="dev-diary__address">{{ current().url }}</span>
             </div>
-            <div class="dev-diary__screen">
-              <img
-                [src]="current().src"
-                [alt]="current().caption"
-                class="dev-diary__img"
-                loading="lazy"
-                decoding="async"
-              >
+
+            <div
+              class="dev-diary__screen"
+              [class.dev-diary__screen--video]="current().type === 'video'">
+
+              @if (current().type === 'video' && videoPlaying()) {
+                <iframe
+                  class="dev-diary__video"
+                  [src]="videoEmbedUrl()!"
+                  title="CareVoice walkthrough video"
+                  frameborder="0"
+                  allow="autoplay; encrypted-media; picture-in-picture"
+                  allowfullscreen>
+                </iframe>
+              } @else {
+                <img
+                  [src]="current().src"
+                  [alt]="current().caption"
+                  class="dev-diary__img"
+                  loading="lazy"
+                  decoding="async"
+                >
+                @if (current().type === 'video') {
+                  <button
+                    type="button"
+                    class="dev-diary__play"
+                    aria-label="Play video"
+                    (click)="playVideo()">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M8 5v14l11-7z"/>
+                    </svg>
+                  </button>
+                }
+              }
             </div>
           </div>
 
@@ -105,6 +134,8 @@ interface Shot {
   styleUrls: ['./dev-diary.component.scss']
 })
 export class DevDiaryComponent {
+  private readonly sanitizer = inject(DomSanitizer);
+
   readonly status = [
     {
       badge: 'Shipped',
@@ -127,29 +158,53 @@ export class DevDiaryComponent {
   ];
 
   readonly shots: Shot[] = [
-    { src: 'screenshots/dashboard.png',        url: 'app.carevoice.io/dashboard',        caption: 'Dashboard — your whole practice at a glance' },
-    { src: 'screenshots/sessions.png',         url: 'app.carevoice.io/sessions',         caption: 'Sessions — filter and manage therapy sessions' },
-    { src: 'screenshots/new-session.png',      url: 'app.carevoice.io/sessions/new',     caption: 'Start a session — patient, type and pre-session notes' },
-    { src: 'screenshots/record-transcribe.png', url: 'app.carevoice.io/sessions/active',  caption: 'Record & transcribe — audio deleted after transcription (HIPAA)' },
-    { src: 'screenshots/soap-draft.png',       url: 'app.carevoice.io/notes/draft',      caption: 'AI-generated SOAP note, ready for therapist review' },
-    { src: 'screenshots/soap-signed.png',      url: 'app.carevoice.io/notes/signed',     caption: 'Electronically signed with a SHA-256 audit trail' },
-    { src: 'screenshots/pdf-export.png',       url: 'app.carevoice.io/notes/export.pdf', caption: 'HIPAA-compliant PDF export, ready for records' },
-    { src: 'screenshots/subscription.png',     url: 'app.carevoice.io/subscription',     caption: 'Subscription & billing — powered by PayPal' },
-    { src: 'screenshots/patient.png',          url: 'app.carevoice.io/patients',         caption: 'Patient record with encrypted PHI' }
+    {
+      type: 'video',
+      src: 'https://img.youtube.com/vi/55LaswfdIHc/maxresdefault.jpg',
+      url: 'youtube.com/watch?v=55LaswfdIHc',
+      caption: 'Watch the full walkthrough on YouTube',
+      youtubeId: '55LaswfdIHc'
+    },
+    { type: 'image', src: 'screenshots/dashboard.png',        url: 'app.carevoice.io/dashboard',        caption: 'Dashboard — your whole practice at a glance' },
+    { type: 'image', src: 'screenshots/sessions.png',         url: 'app.carevoice.io/sessions',         caption: 'Sessions — filter and manage therapy sessions' },
+    { type: 'image', src: 'screenshots/new-session.png',      url: 'app.carevoice.io/sessions/new',     caption: 'Start a session — patient, type and pre-session notes' },
+    { type: 'image', src: 'screenshots/record-transcribe.png', url: 'app.carevoice.io/sessions/active',  caption: 'Record & transcribe — audio deleted after transcription (HIPAA)' },
+    { type: 'image', src: 'screenshots/soap-draft.png',       url: 'app.carevoice.io/notes/draft',      caption: 'AI-generated SOAP note, ready for therapist review' },
+    { type: 'image', src: 'screenshots/soap-signed.png',      url: 'app.carevoice.io/notes/signed',     caption: 'Electronically signed with a SHA-256 audit trail' },
+    { type: 'image', src: 'screenshots/pdf-export.png',       url: 'app.carevoice.io/notes/export.pdf', caption: 'HIPAA-compliant PDF export, ready for records' },
+    { type: 'image', src: 'screenshots/subscription.png',     url: 'app.carevoice.io/subscription',     caption: 'Subscription & billing — powered by PayPal' },
+    { type: 'image', src: 'screenshots/patient.png',          url: 'app.carevoice.io/patients',         caption: 'Patient record with encrypted PHI' }
   ];
 
   readonly index = signal(0);
   readonly current = computed(() => this.shots[this.index()]);
 
+  readonly videoPlaying = signal(false);
+
+  readonly videoEmbedUrl = computed<SafeResourceUrl | null>(() => {
+    const shot = this.current();
+    if (shot.type !== 'video' || !shot.youtubeId) return null;
+    return this.sanitizer.bypassSecurityTrustResourceUrl(
+      `https://www.youtube-nocookie.com/embed/${shot.youtubeId}?autoplay=1&rel=0`
+    );
+  });
+
   next(): void {
+    this.videoPlaying.set(false);
     this.index.update(i => (i + 1) % this.shots.length);
   }
 
   prev(): void {
+    this.videoPlaying.set(false);
     this.index.update(i => (i - 1 + this.shots.length) % this.shots.length);
   }
 
   goTo(i: number): void {
+    this.videoPlaying.set(false);
     this.index.set(i);
+  }
+
+  playVideo(): void {
+    this.videoPlaying.set(true);
   }
 }
