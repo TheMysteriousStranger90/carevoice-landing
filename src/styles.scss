@@ -17,7 +17,8 @@
   // Text
   --text-primary: #e6edf3;
   --text-secondary: #8b949e;
-  --text-muted: #656d76;
+  // ≥ 4.5:1 (WCAG AA) on every surface token below; enforced by styles.spec.ts
+  --text-muted: #8a929c;
 
   // Accent / Brand
   --accent: #388bfd;
@@ -87,12 +88,21 @@
 
 html {
   scroll-behavior: smooth;
+  // Fixed navbar is 68px; section padding on small screens is only 48–64px, so without this
+  // anchor jumps would tuck headings under the bar.
+  scroll-padding-top: 5rem;
   font-size: 16px;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.6;
@@ -152,7 +162,12 @@ ol {
 }
 
 // ---------- Typography --------------------------------------
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   line-height: 1.2;
   font-weight: 700;
   color: var(--text-primary);
@@ -328,23 +343,39 @@ h1, h2, h3, h4, h5, h6 {
 .reveal {
   opacity: 0;
   transform: translateY(28px);
-  transition: opacity 0.65s var(--ease), transform 0.65s var(--ease);
+  transition:
+    opacity 0.65s var(--ease),
+    transform 0.65s var(--ease);
 
   &.revealed {
     opacity: 1;
     transform: translateY(0);
   }
 
-  &--delay-1 { transition-delay: 0.1s; }
-  &--delay-2 { transition-delay: 0.2s; }
-  &--delay-3 { transition-delay: 0.3s; }
-  &--delay-4 { transition-delay: 0.4s; }
+  &--delay-1 {
+    transition-delay: 0.1s;
+  }
+  &--delay-2 {
+    transition-delay: 0.2s;
+  }
+  &--delay-3 {
+    transition-delay: 0.3s;
+  }
+  &--delay-4 {
+    transition-delay: 0.4s;
+  }
 }
 
 // ---------- Divider -----------------------------------------
 .divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border) 20%, var(--border) 80%, transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border) 20%,
+    var(--border) 80%,
+    transparent
+  );
   border: none;
 }
 
@@ -421,7 +452,60 @@ h1, h2, h3, h4, h5, h6 {
   border-width: 0;
 }
 
-.text-center { text-align: center; }
-.text-muted { color: var(--text-muted); }
-.text-secondary { color: var(--text-secondary); }
-.font-mono { font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+.text-center {
+  text-align: center;
+}
+.text-muted {
+  color: var(--text-muted);
+}
+.text-secondary {
+  color: var(--text-secondary);
+}
+.font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+// ── Keyboard focus ─────────────────────────────────────────────────────────
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+// ── Reduced motion ─────────────────────────────────────────────────────────
+// Honour the OS setting: no smooth scrolling, no looping animations, and nothing
+// parked at opacity:0 waiting for a scroll-triggered fade.
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+// ── Print ──────────────────────────────────────────────────────────────────
+// Scroll-reveal content must be visible on paper, and the fixed navbar is noise.
+@media print {
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  app-navbar {
+    display: none;
+  }
+}

@@ -1,0 +1,47 @@
+name: Verify
+
+# Reusable quality gate: lint, formatting, unit tests, production build and a
+# dependency audit. Called by the deploy workflows and by ci.yml, so nothing
+# ships (or merges) without passing it.
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Lint, test, build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Type-check e2e tests
+        run: npm run typecheck:e2e
+
+      - name: Unit tests
+        run: npm run test:ci
+
+      - name: Production build
+        run: npm run build:prod
+
+      # Production dependencies only: dev-tooling advisories (jest/eslint internals)
+      # must not block a release of a static site.
+      - name: Audit production dependencies
+        run: npm run audit:prod

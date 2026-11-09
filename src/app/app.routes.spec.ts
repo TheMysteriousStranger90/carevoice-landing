@@ -2,20 +2,24 @@ import { routes } from './app.routes';
 
 describe('app routes — smoke', () => {
   it('defines the expected top-level paths', () => {
-    const paths = routes.map(r => r.path);
-    expect(paths).toEqual(
-      expect.arrayContaining(['', 'privacy', 'terms', 'hipaa', '**'])
-    );
+    const paths = routes.map((r) => r.path);
+    expect(paths).toEqual(expect.arrayContaining(['', 'privacy', 'terms', 'hipaa', '**']));
   });
 
   it('redirects unknown paths to home', () => {
-    const wildcard = routes.find(r => r.path === '**');
+    const wildcard = routes.find((r) => r.path === '**');
     expect(wildcard?.redirectTo).toBe('');
   });
 
-  for (const path of ['', 'privacy', 'terms', 'hipaa']) {
+  it('bundles the home page eagerly (no extra round trip for the landing route)', () => {
+    const home = routes.find((r) => r.path === '');
+    expect(home?.component).toBeDefined();
+    expect(home?.loadComponent).toBeUndefined();
+  });
+
+  for (const path of ['privacy', 'terms', 'hipaa']) {
     it(`lazily loads a component for "/${path}"`, async () => {
-      const route = routes.find(r => r.path === path);
+      const route = routes.find((r) => r.path === path);
       expect(route?.loadComponent).toBeDefined();
 
       const loaded = await route!.loadComponent!();

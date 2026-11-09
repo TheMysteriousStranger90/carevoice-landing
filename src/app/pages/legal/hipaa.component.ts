@@ -3,7 +3,6 @@ import { LegalLayoutComponent } from './legal-layout.component';
 
 @Component({
   selector: 'app-hipaa',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LegalLayoutComponent],
   template: `
@@ -24,15 +23,18 @@ import { LegalLayoutComponent } from './legal-layout.component';
 
       <h2>3. Minimum necessary</h2>
       <p>
-        Audio recordings are physically deleted from storage immediately after transcription, and raw
-        transcripts are cleared once a SOAP note is created — retaining only what is necessary for
-        clinical documentation.
+        Audio recordings are physically deleted from storage immediately after transcription, and
+        raw transcripts are cleared once a SOAP note is created — retaining only what is necessary
+        for clinical documentation.
       </p>
 
       <h2>4. Access controls</h2>
       <ul>
         <li>Multi-factor authentication (TOTP) gates electronic signature and revocation.</li>
-        <li>All data is scoped to the authenticated clinician; therapists cannot access each other's records.</li>
+        <li>
+          All data is scoped to the authenticated clinician; therapists cannot access each other's
+          records.
+        </li>
         <li>Short-lived access tokens with refresh-token rotation limit session exposure.</li>
       </ul>
 
@@ -50,7 +52,8 @@ import { LegalLayoutComponent } from './legal-layout.component';
 
       <h2>7. Contact</h2>
       <p>
-        For compliance inquiries, contact <a href="mailto:compliance&#64;carevoice.io">compliance&#64;carevoice.io</a>.
+        For compliance inquiries, contact
+        <a href="mailto:compliance&#64;carevoice.io">compliance&#64;carevoice.io</a>.
       </p>
     </app-legal-layout>
   `

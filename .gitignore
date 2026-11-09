@@ -36,3 +36,8 @@ testem.log
 /typings
 .DS_Store
 Thumbs.db
+
+# Test and quality reports
+/playwright-report
+/test-results
+/.lighthouseci

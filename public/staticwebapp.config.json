@@ -1,16 +1,30 @@
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/assets/*", "/favicon.ico"]
+    "exclude": ["/screenshots/*", "/*.{js,css,svg,png,jpg,webp,avif,ico,txt,xml,json,woff2}"]
   },
+  "routes": [
+    {
+      "route": "/*.js",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+    },
+    {
+      "route": "/*.css",
+      "headers": { "Cache-Control": "public, max-age=31536000, immutable" }
+    },
+    {
+      "route": "/screenshots/*",
+      "headers": { "Cache-Control": "public, max-age=86400, stale-while-revalidate=604800" }
+    }
+  ],
   "globalHeaders": {
-    "Cache-Control": "public, max-age=31536000, immutable",
+    "Cache-Control": "no-cache",
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "SAMEORIGIN",
     "Referrer-Policy": "strict-origin-when-cross-origin",
     "Permissions-Policy": "microphone=(self)"
   },
   "mimeTypes": {
-    ".json": "text/json"
+    ".json": "application/json"
   }
 }

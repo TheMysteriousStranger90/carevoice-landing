@@ -1,17 +1,19 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig } from '@angular/core';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import { routes } from './app.routes';
 
+/**
+ * The app is zoneless (Angular's default since v21): no zone.js, change detection
+ * is driven by signals and template events. Components are OnPush + signals, so
+ * scroll listeners and timers no longer trigger application-wide checks.
+ */
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       routes,
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' })
     ),
-    provideHttpClient(withFetch()),
-    provideAnimations()
+    provideHttpClient(withFetch())
   ]
 };

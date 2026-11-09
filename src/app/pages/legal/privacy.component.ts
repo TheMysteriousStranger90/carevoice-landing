@@ -3,7 +3,6 @@ import { LegalLayoutComponent } from './legal-layout.component';
 
 @Component({
   selector: 'app-privacy',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LegalLayoutComponent],
   template: `
@@ -19,9 +18,17 @@ import { LegalLayoutComponent } from './legal-layout.component';
       <h2>2. Information we collect</h2>
       <ul>
         <li><strong>Account data</strong> — name, email, professional license details.</li>
-        <li><strong>Waitlist data</strong> — the email address you submit to join the launch waitlist.</li>
-        <li><strong>Clinical data (PHI)</strong> — session recordings and generated SOAP notes you create.</li>
-        <li><strong>Usage data</strong> — logs, device and browser information for security and reliability.</li>
+        <li>
+          <strong>Waitlist data</strong> — the email address you submit to join the launch waitlist.
+        </li>
+        <li>
+          <strong>Clinical data (PHI)</strong> — session recordings and generated SOAP notes you
+          create.
+        </li>
+        <li>
+          <strong>Usage data</strong> — logs, device and browser information for security and
+          reliability.
+        </li>
       </ul>
 
       <h2>3. How we use information</h2>
@@ -53,7 +60,8 @@ import { LegalLayoutComponent } from './legal-layout.component';
 
       <h2>7. Contact</h2>
       <p>
-        Questions about this policy can be sent to <a href="mailto:privacy&#64;carevoice.io">privacy&#64;carevoice.io</a>.
+        Questions about this policy can be sent to
+        <a href="mailto:privacy&#64;carevoice.io">privacy&#64;carevoice.io</a>.
       </p>
     </app-legal-layout>
   `
