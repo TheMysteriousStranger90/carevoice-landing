@@ -1,64 +1,82 @@
-import { Component, signal, HostListener, ChangeDetectionStrategy } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  inject,
+  signal,
+  viewChild
+} from '@angular/core';
+import { LAUNCH, NAV_LINKS, SECTIONS } from '../../content/site';
+import { LogoComponent } from '../logo/logo.component';
 
 @Component({
   selector: 'app-navbar',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [LogoComponent],
+  host: { '(document:keydown.escape)': 'onEscape()' },
   template: `
     <header class="navbar" [class.navbar--scrolled]="scrolled()">
       <div class="navbar__inner container">
-
         <!-- Brand -->
         <a href="#home" class="navbar__brand" (click)="closeMenu()">
-          <svg class="navbar__logo" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect width="32" height="32" rx="8" fill="#1f6feb"/>
-            <path d="M16 8a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0v-6a3 3 0 0 0-3-3z" fill="white"/>
-            <path d="M10 17a1 1 0 0 1 1 1 5 5 0 0 0 10 0 1 1 0 1 1 2 0 7 7 0 0 1-6 6.92V26h2a1 1 0 1 1 0 2h-6a1 1 0 1 1 0-2h2v-2.08A7 7 0 0 1 9 18a1 1 0 0 1 1-1z" fill="white"/>
-          </svg>
+          <app-logo [size]="32" />
           <span class="navbar__name">CareVoice</span>
         </a>
 
         <!-- Desktop navigation -->
         <nav class="navbar__nav" aria-label="Main navigation">
-          <a href="#features" class="navbar__link">Features</a>
-          <a href="#how-it-works" class="navbar__link">How It Works</a>
-          <a href="#pricing" class="navbar__link">Pricing</a>
-          <a href="#security" class="navbar__link">Security</a>
-          <a href="#progress" class="navbar__link">Diary</a>
+          @for (link of links; track link.fragment) {
+            <a [href]="'#' + link.fragment" class="navbar__link">{{ link.label }}</a>
+          }
         </nav>
 
         <!-- Actions -->
         <div class="navbar__actions">
           <span class="navbar__launch-chip">
-            <span class="navbar__pulse"></span>
-            Launching 2027
+            <span class="navbar__pulse" aria-hidden="true"></span>
+            {{ launch.chip }}
           </span>
-          <a href="#waitlist" class="btn btn--primary">Join Waitlist</a>
+          <a [href]="'#' + waitlistId" class="btn btn--primary">Join Waitlist</a>
         </div>
 
         <!-- Mobile hamburger -->
         <button
+          #hamburger
+          type="button"
           class="navbar__hamburger"
           [class.navbar__hamburger--open]="menuOpen()"
           (click)="toggleMenu()"
-          aria-label="Toggle menu"
-          [attr.aria-expanded]="menuOpen()">
-          <span></span>
-          <span></span>
-          <span></span>
+          [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'"
+          aria-controls="mobile-menu"
+          [attr.aria-expanded]="menuOpen()"
+        >
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
         </button>
       </div>
 
-      <!-- Mobile menu -->
-      <div class="navbar__mobile" [class.navbar__mobile--open]="menuOpen()">
-        <nav class="navbar__mobile-nav">
-          <a href="#features" class="navbar__mobile-link" (click)="closeMenu()">Features</a>
-          <a href="#how-it-works" class="navbar__mobile-link" (click)="closeMenu()">How It Works</a>
-          <a href="#pricing" class="navbar__mobile-link" (click)="closeMenu()">Pricing</a>
-          <a href="#security" class="navbar__mobile-link" (click)="closeMenu()">Security</a>
-          <a href="#progress" class="navbar__mobile-link" (click)="closeMenu()">Diary</a>
+      <!-- Mobile menu: inert (not focusable, hidden from assistive tech) while closed -->
+      <div
+        id="mobile-menu"
+        class="navbar__mobile"
+        [class.navbar__mobile--open]="menuOpen()"
+        [attr.inert]="menuOpen() ? null : ''"
+      >
+        <nav class="navbar__mobile-nav" aria-label="Mobile navigation">
+          @for (link of links; track link.fragment) {
+            <a [href]="'#' + link.fragment" class="navbar__mobile-link" (click)="closeMenu()">{{
+              link.label
+            }}</a>
+          }
         </nav>
-        <a href="#waitlist" class="btn btn--primary" style="width:100%;justify-content:center" (click)="closeMenu()">
+        <a
+          [href]="'#' + waitlistId"
+          class="btn btn--primary navbar__mobile-cta"
+          (click)="closeMenu()"
+        >
           Join Waitlist
         </a>
       </div>
@@ -67,19 +85,40 @@ import { Component, signal, HostListener, ChangeDetectionStrategy } from '@angul
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent {
-  scrolled = signal(false);
-  menuOpen = signal(false);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly hamburger = viewChild<ElementRef<HTMLButtonElement>>('hamburger');
 
-  @HostListener('window:scroll')
-  onScroll(): void {
-    this.scrolled.set(window.scrollY > 24);
+  readonly links = NAV_LINKS;
+  readonly launch = LAUNCH;
+  readonly waitlistId = SECTIONS.waitlist.id;
+
+  readonly scrolled = signal(false);
+  readonly menuOpen = signal(false);
+
+  constructor() {
+    afterNextRender(() => {
+      // Passive scroll listener, registered in the browser only. With zoneless
+      // change detection it only schedules work when the signal value changes.
+      const onScroll = () => this.scrolled.set(window.scrollY > 24);
+      onScroll();
+      window.addEventListener('scroll', onScroll, { passive: true });
+      this.destroyRef.onDestroy(() => window.removeEventListener('scroll', onScroll));
+    });
   }
 
   toggleMenu(): void {
-    this.menuOpen.update(v => !v);
+    this.menuOpen.update((open) => !open);
   }
 
   closeMenu(): void {
     this.menuOpen.set(false);
+  }
+
+  onEscape(): void {
+    if (!this.menuOpen()) {
+      return;
+    }
+    this.closeMenu();
+    this.hamburger()?.nativeElement.focus();
   }
 }

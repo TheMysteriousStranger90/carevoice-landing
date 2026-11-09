@@ -3,7 +3,10 @@
   inset-block-start: 0;
   inset-inline: 0;
   z-index: 100;
-  transition: background var(--transition), border-color var(--transition), backdrop-filter var(--transition);
+  transition:
+    background var(--transition),
+    border-color var(--transition),
+    backdrop-filter var(--transition);
   border-bottom: 1px solid transparent;
 
   &--scrolled {
@@ -35,12 +38,6 @@
     }
   }
 
-  &__logo {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-  }
-
   &__name {
     transition: color var(--transition-fast);
   }
@@ -62,7 +59,9 @@
     font-size: 0.9375rem;
     font-weight: 500;
     color: var(--text-secondary);
-    transition: color var(--transition-fast), background var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background var(--transition-fast);
 
     &:hover {
       color: var(--text-primary);
@@ -133,13 +132,22 @@
       height: 2px;
       background: var(--text-secondary);
       border-radius: 2px;
-      transition: transform var(--transition), opacity var(--transition);
+      transition:
+        transform var(--transition),
+        opacity var(--transition);
     }
 
     &--open {
-      span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-      span:nth-child(2) { opacity: 0; transform: scaleX(0); }
-      span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+      span:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+      }
+      span:nth-child(2) {
+        opacity: 0;
+        transform: scaleX(0);
+      }
+      span:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+      }
     }
 
     @media (max-width: 768px) {
@@ -157,11 +165,22 @@
     overflow: hidden;
     max-height: 0;
     opacity: 0;
-    transition: max-height var(--transition-slow), opacity var(--transition);
+    // visibility removes the closed menu from the tab order (the template also sets `inert`);
+    // it flips only after the collapse animation has finished.
+    visibility: hidden;
+    transition:
+      max-height var(--transition-slow),
+      opacity var(--transition),
+      visibility 0s linear var(--transition-slow);
 
     &--open {
       max-height: 400px;
       opacity: 1;
+      visibility: visible;
+      transition:
+        max-height var(--transition-slow),
+        opacity var(--transition),
+        visibility 0s;
     }
 
     @media (max-width: 768px) {
@@ -182,7 +201,9 @@
     font-size: 1rem;
     font-weight: 500;
     color: var(--text-secondary);
-    transition: color var(--transition-fast), background var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      background var(--transition-fast);
 
     &:hover {
       color: var(--text-primary);
@@ -192,6 +213,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); opacity: 0.4; }
-  50% { transform: scale(1.8); opacity: 0; }
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
 }

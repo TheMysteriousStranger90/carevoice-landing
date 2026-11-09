@@ -52,7 +52,8 @@
     }
 
     .dev-diary__status-item[data-state='active'] & {
-      color: var(--accent);
+      // --accent-hover: the plain accent is only ~4:1 on the card, below AA for 11px text.
+      color: var(--accent-hover);
       border-color: rgba(56, 139, 253, 0.5);
       background: rgba(56, 139, 253, 0.1);
     }
@@ -105,9 +106,15 @@
       background: var(--border);
     }
 
-    span:nth-child(1) { background: #ff5f57; }
-    span:nth-child(2) { background: #febc2e; }
-    span:nth-child(3) { background: #28c840; }
+    span:nth-child(1) {
+      background: #ff5f57;
+    }
+    span:nth-child(2) {
+      background: #febc2e;
+    }
+    span:nth-child(3) {
+      background: #28c840;
+    }
   }
 
   &__address {
@@ -167,7 +174,9 @@
     border: 2px solid rgba(255, 255, 255, 0.85);
     color: #fff;
     cursor: pointer;
-    transition: transform 0.2s ease, background 0.2s ease;
+    transition:
+      transform 0.2s ease,
+      background 0.2s ease;
 
     svg {
       margin-left: 3px; // optical centering for the play triangle

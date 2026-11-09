@@ -31,16 +31,13 @@
     text-decoration: none;
     transition: opacity var(--transition-fast);
 
-    &:hover { opacity: 0.8; }
+    &:hover {
+      opacity: 0.8;
+    }
 
-    span { font-weight: 700; }
-  }
-
-  &__logo-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 8px;
-    flex-shrink: 0;
+    span {
+      font-weight: 700;
+    }
   }
 
   &__tagline {
@@ -109,7 +106,10 @@
     background: var(--bg-card);
     border: 1px solid var(--border);
     color: var(--text-secondary);
-    transition: color var(--transition-fast), border-color var(--transition-fast), background var(--transition-fast);
+    transition:
+      color var(--transition-fast),
+      border-color var(--transition-fast),
+      background var(--transition-fast);
 
     &:hover {
       color: var(--accent-hover);

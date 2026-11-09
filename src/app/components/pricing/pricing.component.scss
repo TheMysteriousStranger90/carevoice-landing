@@ -31,10 +31,15 @@
     &--popular {
       background: linear-gradient(145deg, #1a1f2e 0%, #1c2340 100%);
       border-color: var(--accent-dark);
-      box-shadow: 0 0 0 1px rgba(56, 139, 253, 0.3), var(--shadow-glow);
+      box-shadow:
+        0 0 0 1px rgba(56, 139, 253, 0.3),
+        var(--shadow-glow);
 
       &:hover {
-        box-shadow: 0 0 0 1px rgba(56, 139, 253, 0.5), var(--shadow-glow), 0 24px 48px rgba(0, 0, 0, 0.5);
+        box-shadow:
+          0 0 0 1px rgba(56, 139, 253, 0.5),
+          var(--shadow-glow),
+          0 24px 48px rgba(0, 0, 0, 0.5);
       }
     }
   }
@@ -136,6 +141,16 @@
     svg {
       color: var(--success);
       flex-shrink: 0;
+    }
+
+    // Plain-language BAA disclosure: left-aligned text block, no icon.
+    &--baa {
+      display: block;
+      max-width: 640px;
+      margin-inline: auto;
+      margin-top: 0.75rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
     }
   }
 }

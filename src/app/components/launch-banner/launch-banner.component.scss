@@ -10,7 +10,12 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: radial-gradient(ellipse, rgba(31, 111, 235, 0.12) 0%, rgba(188, 140, 255, 0.06) 50%, transparent 70%);
+    background: radial-gradient(
+      ellipse,
+      rgba(31, 111, 235, 0.12) 0%,
+      rgba(188, 140, 255, 0.06) 50%,
+      transparent 70%
+    );
     filter: blur(40px);
     pointer-events: none;
     z-index: 0;
@@ -100,7 +105,7 @@
     text-align: center;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
-    font-feature-settings: "tnum";
+    font-feature-settings: 'tnum';
     transition: all 0.3s var(--ease);
   }
 
@@ -155,7 +160,9 @@
     border-radius: var(--radius-lg);
     color: var(--text-primary);
     font-size: 0.9375rem;
-    transition: border-color var(--transition), box-shadow var(--transition);
+    transition:
+      border-color var(--transition),
+      box-shadow var(--transition);
     outline: none;
 
     &::placeholder {
@@ -236,54 +243,33 @@
     line-height: 1.5;
   }
 
-  // Social proof
-  &__social {
-    display: flex;
-    align-items: center;
-    gap: 0.875rem;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
-
-  &__avatars {
-    display: flex;
-  }
-
-  &__avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, var(--accent-dark), var(--purple));
-    border: 2px solid var(--bg-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: white;
-    margin-left: -8px;
-
-    &:first-child {
-      margin-left: 0;
-    }
-  }
-
-  &__social-text {
-    font-size: 0.875rem;
-    color: var(--text-secondary);
-
-    strong {
-      color: var(--text-primary);
-    }
+  &__target-note {
+    margin: -1rem 0 0;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    text-align: center;
   }
 }
 
 @keyframes pulseDot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(0.85);
+  }
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.97); }
-  to { opacity: 1; transform: scale(1); }
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }

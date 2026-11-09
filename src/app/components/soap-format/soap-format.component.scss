@@ -57,10 +57,18 @@
     transition: all var(--transition);
     border-left: 4px solid transparent;
 
-    &--s { border-left-color: var(--soap-s); }
-    &--o { border-left-color: var(--soap-o); }
-    &--a { border-left-color: var(--soap-a); }
-    &--p { border-left-color: var(--soap-p); }
+    &--s {
+      border-left-color: var(--soap-s);
+    }
+    &--o {
+      border-left-color: var(--soap-o);
+    }
+    &--a {
+      border-left-color: var(--soap-a);
+    }
+    &--p {
+      border-left-color: var(--soap-p);
+    }
 
     &:hover {
       transform: translateX(4px);
@@ -85,10 +93,22 @@
     font-size: 0.875rem;
     font-weight: 800;
 
-    .soap-format__card--s & { background: rgba(56, 139, 253, 0.2); color: var(--soap-s); }
-    .soap-format__card--o & { background: rgba(63, 185, 80, 0.2); color: var(--soap-o); }
-    .soap-format__card--a & { background: rgba(210, 153, 34, 0.2); color: var(--soap-a); }
-    .soap-format__card--p & { background: rgba(188, 140, 255, 0.2); color: var(--soap-p); }
+    .soap-format__card--s & {
+      background: rgba(56, 139, 253, 0.2);
+      color: var(--soap-s);
+    }
+    .soap-format__card--o & {
+      background: rgba(63, 185, 80, 0.2);
+      color: var(--soap-o);
+    }
+    .soap-format__card--a & {
+      background: rgba(210, 153, 34, 0.2);
+      color: var(--soap-a);
+    }
+    .soap-format__card--p & {
+      background: rgba(188, 140, 255, 0.2);
+      color: var(--soap-p);
+    }
   }
 
   &__section-name {

@@ -3,7 +3,6 @@ import { LegalLayoutComponent } from './legal-layout.component';
 
 @Component({
   selector: 'app-terms',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [LegalLayoutComponent],
   template: `
@@ -31,15 +30,17 @@ import { LegalLayoutComponent } from './legal-layout.component';
 
       <h2>4. Subscriptions and billing</h2>
       <p>
-        Paid plans are billed monthly through our payment processor. Each plan includes a 14-day free
-        trial. You may cancel at any time; cancellation takes effect at the end of the current
+        Paid plans are billed monthly through our payment processor. Each plan includes a 14-day
+        free trial. You may cancel at any time; cancellation takes effect at the end of the current
         billing period.
       </p>
 
       <h2>5. Acceptable use</h2>
       <ul>
         <li>Do not upload data you are not authorized to process.</li>
-        <li>Do not attempt to disrupt, reverse engineer, or gain unauthorized access to the service.</li>
+        <li>
+          Do not attempt to disrupt, reverse engineer, or gain unauthorized access to the service.
+        </li>
         <li>Do not use the service for any unlawful purpose.</li>
       </ul>
 
@@ -51,7 +52,8 @@ import { LegalLayoutComponent } from './legal-layout.component';
 
       <h2>7. Contact</h2>
       <p>
-        Questions about these terms can be sent to <a href="mailto:legal&#64;carevoice.io">legal&#64;carevoice.io</a>.
+        Questions about these terms can be sent to
+        <a href="mailto:legal&#64;carevoice.io">legal&#64;carevoice.io</a>.
       </p>
     </app-legal-layout>
   `

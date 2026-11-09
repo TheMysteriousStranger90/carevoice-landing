@@ -1,23 +1,22 @@
-import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+import { setupZonelessTestEnv } from 'jest-preset-angular/setup-env/zoneless';
 
-setupZoneTestEnv();
+// The app is zoneless, so tests run zoneless too (use `await fixture.whenStable()`).
+setupZonelessTestEnv();
 
-// jsdom has no IntersectionObserver; the appReveal scroll-animation directive needs it.
+// jsdom lacks IntersectionObserver; provide a minimal, TypeScript-6-compatible stub.
 class MockIntersectionObserver implements IntersectionObserver {
-  readonly root = null;
+  readonly root: Element | Document | null = null;
   readonly rootMargin = '';
-  readonly thresholds = [];
-  observe(): void {}
-  unobserve(): void {}
-  disconnect(): void {}
-  takeRecords(): IntersectionObserverEntry[] {
-    return [];
-  }
+  readonly scrollMargin = '';
+  readonly thresholds: readonly number[] = [];
+  observe = jest.fn();
+  unobserve = jest.fn();
+  disconnect = jest.fn();
+  takeRecords = jest.fn((): IntersectionObserverEntry[] => []);
 }
 
-Object.defineProperty(globalThis, 'IntersectionObserver', {
+Object.defineProperty(window, 'IntersectionObserver', {
   writable: true,
   configurable: true,
   value: MockIntersectionObserver
 });
-

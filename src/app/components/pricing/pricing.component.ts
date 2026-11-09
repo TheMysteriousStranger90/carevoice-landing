@@ -1,31 +1,27 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { PLANS } from '../../content/plans';
+import { COMPLIANCE_COPY, LAUNCH, SECTIONS } from '../../content/site';
 import { RevealDirective } from '../../directives/reveal.directive';
-
-interface PricingPlan {
-  name: string;
-  price: number;
-  period: string;
-  tagline: string;
-  popular: boolean;
-  features: { text: string; included: boolean }[];
-}
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-pricing',
-  standalone: true,
-  imports: [RevealDirective],
+  imports: [RevealDirective, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <section class="section pricing" id="pricing">
+    <section class="section pricing" [id]="sectionId">
       <div class="container">
         <div class="section-header" appReveal>
           <p class="section-tag">Pricing</p>
           <h2>Straightforward pricing</h2>
-          <p>Every plan includes a 14-day free trial. No credit card required. Cancel anytime.</p>
+          <p>
+            Planned launch pricing, {{ launch.label.toLowerCase() }}. Every plan will include a
+            14-day free trial, and you can cancel anytime.
+          </p>
         </div>
 
         <div class="pricing__grid">
-          @for (plan of plans; track plan.name) {
+          @for (plan of plans; track plan.id) {
             <div class="pricing__card" [class.pricing__card--popular]="plan.popular" appReveal>
               @if (plan.popular) {
                 <div class="pricing__popular-badge">Most Popular</div>
@@ -40,36 +36,66 @@ interface PricingPlan {
                 <p class="pricing__tagline">{{ plan.tagline }}</p>
               </div>
 
-              <hr class="divider">
+              <hr class="divider" />
 
               <ul class="check-list pricing__features">
                 @for (feat of plan.features; track feat.text) {
                   <li>
                     @if (feat.included) {
-                      <svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <polyline points="20 6 9 17 4 12"/>
+                      <svg
+                        class="check-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        aria-hidden="true"
+                      >
+                        <polyline points="20 6 9 17 4 12" />
                       </svg>
                     } @else {
-                      <svg class="cross-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <line x1="18" y1="6" x2="6" y2="18"/>
-                        <line x1="6" y1="6" x2="18" y2="18"/>
+                      <svg
+                        class="cross-icon"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.5"
+                        stroke-linecap="round"
+                        aria-hidden="true"
+                      >
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
                       </svg>
                     }
-                    <span [class.pricing__feat--unavailable]="!feat.included">{{ feat.text }}</span>
+                    <span [class.pricing__feat--unavailable]="!feat.included">
+                      @if (!feat.included) {
+                        <span class="sr-only">Not included: </span>
+                      }
+                      {{ feat.text }}
+                    </span>
                   </li>
                 }
               </ul>
 
-              <a href="#waitlist" class="btn pricing__cta" [class.btn--primary]="plan.popular" [class.btn--outline]="!plan.popular">
-                Start Free Trial
+              <!-- The product is pre-launch, so every plan CTA leads to the waitlist. -->
+              <a
+                [href]="'#' + waitlistId"
+                class="btn pricing__cta"
+                [class.btn--primary]="plan.popular"
+                [class.btn--outline]="!plan.popular"
+              >
+                Join waitlist
               </a>
             </div>
           }
         </div>
 
         <p class="pricing__note" appReveal>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          All plans include a 14-day free trial. Cancel anytime. Powered by PayPal. Prices in USD.
+          <app-icon name="shield" [size]="14" [strokeWidth]="2" />
+          Free trial and billing start at launch. Cancel anytime. Powered by PayPal. Prices in USD.
+        </p>
+        <p class="pricing__note pricing__note--baa" appReveal>
+          {{ compliance.baaNote }}
         </p>
       </div>
     </section>
@@ -77,57 +103,9 @@ interface PricingPlan {
   styleUrls: ['./pricing.component.scss']
 })
 export class PricingComponent {
-  readonly plans: PricingPlan[] = [
-    {
-      name: 'Solo',
-      price: 29,
-      period: 'month',
-      tagline: 'For one therapist in private practice.',
-      popular: false,
-      features: [
-        { text: '1 therapist', included: true },
-        { text: '50 sessions / month', included: true },
-        { text: 'Speech-to-SOAP AI', included: true },
-        { text: 'PDF export', included: true },
-        { text: '1-year note storage', included: true },
-        { text: 'Supervisor review', included: false },
-        { text: 'EHR-compatible export', included: false },
-        { text: 'BAA included', included: false }
-      ]
-    },
-    {
-      name: 'Practice',
-      price: 79,
-      period: 'month',
-      tagline: 'For group practices — up to 5 therapists.',
-      popular: true,
-      features: [
-        { text: 'Up to 5 therapists', included: true },
-        { text: 'Unlimited sessions', included: true },
-        { text: 'Speech-to-SOAP AI', included: true },
-        { text: 'PDF export', included: true },
-        { text: '7-year note storage', included: true },
-        { text: 'Supervisor review', included: true },
-        { text: 'Team analytics', included: true },
-        { text: 'EHR-compatible export', included: true }
-      ]
-    },
-    {
-      name: 'Clinic',
-      price: 299,
-      period: 'month',
-      tagline: 'For clinics and institutions — up to 25 therapists.',
-      popular: false,
-      features: [
-        { text: 'Up to 25 therapists', included: true },
-        { text: 'Unlimited sessions', included: true },
-        { text: 'Everything in Practice', included: true },
-        { text: 'BAA included', included: true },
-        { text: 'SSO / Active Directory', included: true },
-        { text: 'Custom AI prompts', included: true },
-        { text: 'Priority support', included: true },
-        { text: 'Dedicated onboarding', included: true }
-      ]
-    }
-  ];
+  readonly plans = PLANS;
+  readonly launch = LAUNCH;
+  readonly compliance = COMPLIANCE_COPY;
+  readonly sectionId = SECTIONS.pricing.id;
+  readonly waitlistId = SECTIONS.waitlist.id;
 }

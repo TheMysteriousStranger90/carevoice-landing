@@ -1,0 +1,11 @@
+dist/
+.angular/
+node_modules/
+coverage/
+playwright-report/
+test-results/
+.lighthouseci/
+package-lock.json
+public/
+assets-src/
+*.md

@@ -1,33 +1,46 @@
-import { Directive, ElementRef, OnInit, OnDestroy } from '@angular/core';
+import { afterNextRender, DestroyRef, Directive, ElementRef, inject } from '@angular/core';
 
+/**
+ * Fades an element in the first time it scrolls into view.
+ *
+ * Progressive enhancement: the hidden starting state (`.reveal`) is only applied
+ * in the browser, only when IntersectionObserver exists, and never for people
+ * who prefer reduced motion – in every other case the content is simply visible.
+ */
 @Directive({
-  selector: '[appReveal]',
-  standalone: true
+  selector: '[appReveal]'
 })
-export class RevealDirective implements OnInit, OnDestroy {
-  private observer: IntersectionObserver | null = null;
+export class RevealDirective {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly destroyRef = inject(DestroyRef);
 
-  constructor(private readonly el: ElementRef<HTMLElement>) {}
+  constructor() {
+    afterNextRender(() => {
+      if (typeof IntersectionObserver === 'undefined' || prefersReducedMotion()) {
+        return;
+      }
 
-  ngOnInit(): void {
-    this.el.nativeElement.classList.add('reveal');
+      const element = this.host.nativeElement;
+      element.classList.add('reveal');
 
-    this.observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
-            this.observer?.unobserve(entry.target);
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('revealed');
+              observer.unobserve(entry.target);
+            }
           }
-        });
-      },
-      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
-    );
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      );
 
-    this.observer.observe(this.el.nativeElement);
+      observer.observe(element);
+      this.destroyRef.onDestroy(() => observer.disconnect());
+    });
   }
+}
 
-  ngOnDestroy(): void {
-    this.observer?.disconnect();
-  }
+function prefersReducedMotion(): boolean {
+  return typeof matchMedia === 'function' && matchMedia('(prefers-reduced-motion: reduce)').matches;
 }
