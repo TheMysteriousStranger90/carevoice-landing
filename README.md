@@ -68,3 +68,11 @@ scripts/          Build helpers (screenshot optimizer)
 [![YouTube](https://img.youtube.com/vi/55LaswfdIHc/maxresdefault.jpg)](https://youtu.be/55LaswfdIHc)
 
 </details>
+
+## Author
+
+Bohdan Harabadzhyu (Bogdan Garabagiu) and CareVoice
+
+## License
+
+MIT — see [LICENSE](./LICENSE).
